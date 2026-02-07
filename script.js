@@ -5,34 +5,27 @@ const bgMusic = document.getElementById("bgMusic");
 if (bgMusic) {
   bgMusic.volume = 0.3; // Set ambient background volume (30%)
 
-  // Unmute and try to play (audio starts muted in HTML to allow autoplay)
+  // Function to unmute and play music
   const attemptUnmuteAndPlay = () => {
-    bgMusic.muted = false; // Unmute
+    bgMusic.muted = false;
     const playPromise = bgMusic.play();
     if (playPromise !== undefined) {
       playPromise.then(() => {
         console.log("BGM playing successfully!");
       }).catch(() => {
-        console.log("Autoplay still blocked, waiting for user interaction...");
+        console.log("Autoplay blocked, waiting for user interaction...");
       });
     }
   };
 
-  // Try to unmute immediately when page loads
-  attemptUnmuteAndPlay();
-
-  // Retry after brief delays for browser compatibility
-  setTimeout(attemptUnmuteAndPlay, 100);
-  setTimeout(attemptUnmuteAndPlay, 300);
-  setTimeout(attemptUnmuteAndPlay, 500);
-
-  // Set up listeners for ALL user interactions to unmute and play
+  // Set up listeners for user interactions (fallback if autoplay fails)
   const startMusic = () => {
     bgMusic.muted = false;
+    bgMusic.volume = 0.3;
     bgMusic.play().catch(() => { });
   };
 
-  // Listen to every possible user interaction
+  // Listen to user interactions as fallback
   ['click', 'touchstart', 'touchend', 'keydown', 'mousemove'].forEach(eventType => {
     document.addEventListener(eventType, startMusic, { once: true });
   });
@@ -45,6 +38,9 @@ if (bgMusic) {
     firstVideo.addEventListener('play', startMusic, { once: true });
     firstVideo.addEventListener('canplay', startMusic, { once: true });
   }
+
+  // Expose function for loading screen to call
+  window.startBGM = attemptUnmuteAndPlay;
 }
 
 /* =========================================
@@ -59,12 +55,11 @@ window.addEventListener('load', () => {
       loadingScreen.classList.add('hidden');
 
       // Trigger music when loading screen completes
-      if (bgMusic) {
-        bgMusic.muted = false;
-        bgMusic.volume = 0.3;
-        bgMusic.play().catch(() => {
-          console.log('Music playback after loading screen blocked, waiting for user interaction');
-        });
+      if (window.startBGM) {
+        window.startBGM(); // Try immediately
+        setTimeout(window.startBGM, 100); // Retry after 100ms
+        setTimeout(window.startBGM, 300); // Retry after 300ms
+        setTimeout(window.startBGM, 500); // Retry after 500ms
       }
     }
   }, 2500); // Hide after 2.5 seconds
