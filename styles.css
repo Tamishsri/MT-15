@@ -1,0 +1,1454 @@
+@import url("https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600&display=swap");
+
+@font-face {
+  font-family: "LastShuriken";
+  src:
+    url("./the-last-shuriken/The Last Shuriken.otf") format("opentype"),
+    url("./the-last-shuriken/The Last Shuriken.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "RacingEngine";
+  src: url("./racing-engine/RacingEngine-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --black: #000000;
+  --white: #f4f4f4;
+  --muted: #c7c7c7;
+  --neon: #b9fbff;
+  --neon-deep: #6fe9ff;
+  --mask-core: rgba(0, 0, 0, 0.32);
+  --mask-fade: rgba(0, 0, 0, 0);
+  --video2-fade-ms: 900ms;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  /* Locked by default */
+  scroll-behavior: auto;
+  /* Controlled by JS for weighted feel */
+}
+
+body {
+  margin: 0;
+  background: var(--black);
+  color: var(--white);
+  font-family: "Oxanium", "Rajdhani", "Chakra Petch", "Noto Sans", "Helvetica Neue", sans-serif;
+  cursor: none;
+  /* Hide default cursor to show custom cursor */
+}
+
+#opening {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--black);
+  isolation: isolate;
+}
+
+#opening #headlampVideo {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Continuation layer for Video 2. */
+#opening #watcherVideo {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  opacity: 0;
+  z-index: 1;
+  transition: opacity var(--video2-fade-ms) ease;
+}
+
+#opening #watcherVideo.is-visible {
+  opacity: 1;
+}
+
+#opening video {
+  pointer-events: none;
+}
+
+#opening .title-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+#opening .title-layer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, var(--mask-core) 0%, var(--mask-fade) 60%),
+    radial-gradient(circle at 12% 85%, rgba(0, 0, 0, 0.28) 0%, var(--mask-fade) 45%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+#opening .title-layer h1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  text-align: center;
+  letter-spacing: 0.42em;
+  font-size: clamp(2.2rem, 4.6vw, 5.3rem);
+  font-weight: 600;
+  color: var(--neon);
+  z-index: 1;
+  text-transform: uppercase;
+  font-family: "LastShuriken", "Oxanium", "Rajdhani", "Chakra Petch", "Noto Sans", "Helvetica Neue", sans-serif;
+}
+
+#opening .title-layer p {
+  position: absolute;
+  left: 6vw;
+  bottom: 6vh;
+  margin: 0;
+  text-align: left;
+  letter-spacing: 0.26em;
+  font-size: clamp(0.68rem, 0.9vw, 0.98rem);
+  font-weight: 300;
+  color: var(--neon);
+  z-index: 1;
+  opacity: 0.7;
+}
+
+/* Act II scroll cue: subtle and static, shown only after Act I ends. */
+#scrollCue {
+  position: fixed;
+  left: 50%;
+  bottom: 4vh;
+  transform: translateX(-50%);
+  display: none;
+  opacity: 0;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+  z-index: 6;
+}
+
+/* Interlude Section: Big, Bold, Centered Text */
+#interlude {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10vh 0;
+  background: var(--black);
+}
+
+#interlude h2 {
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.42em;
+  font-size: clamp(2.2rem, 4.6vw, 5.3rem);
+  font-weight: 600;
+  color: var(--neon);
+  font-family: "RacingEngine", "LastShuriken", "Oxanium", "Rajdhani", "Chakra Petch", "Noto Sans", "Helvetica Neue", sans-serif;
+  text-shadow: 0 0 20px rgba(185, 251, 255, 0.4);
+}
+
+body.act2-ready #scrollCue {
+  display: block;
+  opacity: 0.15;
+}
+
+body.scroll-cue-dismissed #scrollCue {
+  display: none;
+}
+
+/* Act II begins: the next chapter below the first viewport. */
+#act2 {
+  min-height: 100vh;
+  width: 100%;
+  background: #000000;
+  color: #ffffff;
+  padding: 0;
+  margin-top: 40vh;
+  /* CINEMATIC GAP */
+  position: relative;
+}
+
+/* Cinematic Vignette Overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.8) 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+#act2,
+#act2 * {
+  color: #ffffff;
+}
+
+#act2 :focus {
+  outline: none;
+  box-shadow: none;
+}
+
+#act2 .act2-threshold {
+  position: relative;
+  min-height: 100vh;
+}
+
+#act2 .threshold-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.42em;
+  /* Matched to Act I */
+  line-height: 1.5;
+  font-size: clamp(2.2rem, 4.6vw, 5.3rem);
+  /* Matched to Act I */
+  font-weight: 600;
+  /* Matched to Act I */
+  color: var(--neon);
+  /* Matched to Act I */
+  font-family: "LastShuriken", "Oxanium", "Rajdhani", "Chakra Petch", "Noto Sans", "Helvetica Neue", sans-serif;
+  /* Matched to Act I */
+  z-index: 2;
+  /* Ensure above video */
+  width: 100%;
+  text-shadow: 0 0 20px rgba(185, 251, 255, 0.4);
+  /* Neon Glow */
+}
+
+/* Act II logo section begins */
+#act2 .act2-logo-section {
+  min-height: 100vh;
+  width: 100%;
+  background: #000000;
+  display: grid;
+  place-items: end center;
+  padding: 0 0 22vh;
+}
+
+#act2 .act2-logo {
+  display: block;
+  width: clamp(170px, 20vw, 320px);
+  max-width: 72vw;
+  height: auto;
+}
+
+/* Act III begins: scroll-controlled video continuation. */
+#act3 {
+  position: relative;
+  min-height: 300vh;
+  width: 100%;
+  background: #000000;
+  overflow: hidden;
+}
+
+#act3 #approachVideo {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  background: #000000;
+}
+
+.act3-inline-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+  z-index: 0;
+  opacity: 0.4;
+  /* Dimming to ensure text doesn't get outshined */
+  margin-top: 0;
+}
+
+/* =========================================
+   ACT IV: SPECIFICATIONS (REFINED & EXPANDED)
+   ========================================= */
+
+#act4 {
+  min-height: 120vh;
+  /* Increased for more content */
+  width: 100%;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12vh 6vw 6vh;
+  position: relative;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.act4-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* --- Spec Grid & Typography --- */
+.spec-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6vh;
+  /* Increased spacing for breathing room */
+  align-items: flex-start;
+  max-width: 800px;
+}
+
+.spec-item h3 {
+  margin: 0 0 0.6rem 0;
+  font-family: "Oxanium", sans-serif;
+  font-size: clamp(0.9rem, 1.1vw, 1.2rem);
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  color: #888;
+  text-transform: uppercase;
+  border-left: 2px solid var(--neon);
+  padding-left: 10px;
+}
+
+.spec-value-group {
+  position: relative;
+  display: inline-block;
+}
+
+.spec-main {
+  margin: 0;
+  font-family: "Oxanium", sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  /* Slightly adjusted for density */
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.spec-sub {
+  margin: 0.4rem 0 0 0;
+  font-family: "Oxanium", sans-serif;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* --- Logo Section --- */
+.act4-logo-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 2vh;
+  margin-top: 15vh;
+  /* More breathing room */
+}
+
+.act4-logo {
+  width: clamp(200px, 30vw, 400px);
+  /* Significantly larger */
+  height: auto;
+  opacity: 1;
+  /* Full visibility for impact */
+  filter: grayscale(100%) contrast(1.2);
+}
+
+/* =========================================
+   MICRO-ANIMATIONS (CSS ONLY)
+   ========================================= */
+
+/* =========================================
+   ACT IV: TECHNICAL SVGs (INDUSTRIAL)
+   ========================================= */
+
+/* Update Spec Grid Layout */
+.spec-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4vh;
+  max-width: 800px;
+}
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.anim-zone {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.spec-icon {
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+  will-change: transform, opacity;
+}
+
+.spec-content {
+  flex: 1;
+}
+
+/* --- DATA LINE ANIMATIONS (COOKED / INTENSIFIED) --- */
+
+/* Base Line Style - Thicker & Brighter */
+.spec-content div[class$="-line"] {
+  height: 3px;
+  margin-top: 8px;
+  background: var(--neon);
+  box-shadow: 0 0 5px var(--neon);
+  width: 0;
+  opacity: 0.8;
+  will-change: width, opacity, box-shadow;
+  position: relative;
+}
+
+/* 1. RPM Redline - Aggressive */
+.spec-item.is-visible .rpm-line {
+  background: linear-gradient(90deg, var(--white) 0%, var(--neon) 60%, #ff0000 100%);
+  animation: data-rpm-rev 1.5s cubic-bezier(0.1, 0, 0, 1) forwards;
+}
+
+@keyframes data-rpm-rev {
+  0% {
+    width: 0;
+  }
+
+  80% {
+    width: 90%;
+  }
+
+  90% {
+    width: 95%;
+    box-shadow: 0 0 15px #ff0000;
+  }
+
+  100% {
+    width: 100%;
+    box-shadow: 0 0 20px #ff0000;
+  }
+}
+
+/* 2. Heritage Line - Steady Draw */
+.spec-item.is-visible .heritage-line {
+  background: var(--white);
+  animation: data-draw-slow 1.2s ease-out forwards;
+}
+
+/* 3. VVA Shift Line - Fast Snap */
+.spec-item.is-visible .vva-line {
+  background: linear-gradient(90deg, var(--neon), var(--white));
+  animation: data-vva-kick 3s cubic-bezier(0.8, 0, 0.2, 1) infinite;
+}
+
+@keyframes data-vva-kick {
+
+  0%,
+  80% {
+    width: 40%;
+    opacity: 0.5;
+    filter: brightness(1);
+  }
+
+  85% {
+    width: 100%;
+    opacity: 1;
+    filter: brightness(2);
+    box-shadow: 0 0 15px var(--neon);
+  }
+
+  100% {
+    width: 40%;
+    opacity: 0.5;
+    filter: brightness(1);
+  }
+}
+
+/* 4. Shifter Steps - Distinct */
+.spec-item.is-visible .shifter-line {
+  animation: data-gear-steps 2.5s steps(6, end) infinite;
+}
+
+@keyframes data-gear-steps {
+  0% {
+    width: 15%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+/* 5. Clutch Line - Breathing */
+.spec-item.is-visible .clutch-line {
+  animation: data-clutch-ease 3s ease-in-out infinite;
+  transform-origin: left;
+}
+
+@keyframes data-clutch-ease {
+
+  0%,
+  100% {
+    width: 20%;
+    opacity: 0.4;
+  }
+
+  50% {
+    width: 90%;
+    opacity: 1;
+    box-shadow: 0 0 10px var(--neon);
+  }
+}
+
+/* 6. Deltabox Rigid - Solid Lock */
+.spec-item.is-visible .deltabox-line {
+  background: var(--white);
+  height: 4px;
+  animation: data-draw-solid 0.8s ease-out forwards;
+}
+
+@keyframes data-draw-solid {
+  to {
+    width: 100%;
+    opacity: 0.5;
+  }
+}
+
+/* 7. Suspension Stroke - Deep Travel */
+.spec-item.is-visible .suspension-line {
+  background: linear-gradient(90deg, var(--neon-deep), var(--white));
+  animation: data-sus-stroke 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes data-sus-stroke {
+  from {
+    width: 25%;
+  }
+
+  to {
+    width: 95%;
+  }
+}
+
+/* 8. ABS Pulse Line - Rapid Fire */
+.spec-item.is-visible .abs-line {
+  background: repeating-linear-gradient(90deg, var(--neon) 0, var(--neon) 6px, transparent 6px, transparent 12px);
+  animation: data-abs-pulse 0.4s linear infinite;
+}
+
+@keyframes data-abs-pulse {
+  0% {
+    width: 25%;
+    opacity: 0.6;
+  }
+
+  50% {
+    width: 25%;
+    opacity: 1;
+    box-shadow: 0 0 8px var(--neon);
+  }
+
+  100% {
+    width: 25%;
+    opacity: 0.6;
+  }
+}
+
+/* 9. Traction Scroll - Scanning */
+.spec-item.is-visible .traction-line {
+  background: repeating-linear-gradient(90deg, var(--white) 0, var(--white) 8px, transparent 8px, transparent 16px);
+  background-size: 200% 100%;
+  width: 100%;
+  animation: data-tread-scroll 1.5s linear infinite;
+}
+
+@keyframes data-tread-scroll {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* 10. Ergonomic Line - Smooth */
+.spec-item.is-visible .ergonomic-line {
+  background: var(--white);
+  height: 2px;
+  animation: data-draw-slow 1.8s ease-out forwards;
+}
+
+@keyframes data-draw-slow {
+  to {
+    width: 70%;
+    opacity: 0.6;
+  }
+}
+
+/* 11. Balance Line - Shifting Weight */
+.spec-item.is-visible .balance-line {
+  background: linear-gradient(90deg, transparent, var(--neon), transparent);
+  animation: data-balance-shift 2.5s ease-in-out infinite;
+}
+
+@keyframes data-balance-shift {
+
+  0%,
+  100% {
+    width: 50%;
+    transform: translateX(0);
+  }
+
+  50% {
+    width: 50%;
+    transform: translateX(40px);
+  }
+}
+
+/* 12. Digital Stream - Glitchy */
+.spec-item.is-visible .digital-line {
+  background: var(--neon);
+  box-shadow: 0 0 8px var(--neon);
+  animation: data-digital-jitter 0.15s steps(3) infinite;
+}
+
+@keyframes data-digital-jitter {
+  0% {
+    width: 30%;
+  }
+
+  50% {
+    width: 95%;
+  }
+
+  100% {
+    width: 40%;
+  }
+}
+
+/* 13. Eco Flow - Continuous */
+.spec-item.is-visible .eco-line {
+  background: linear-gradient(90deg, var(--neon-deep), var(--neon));
+  animation: data-eco-fill 3s linear infinite;
+}
+
+@keyframes data-eco-fill {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+
+  50% {
+    width: 90%;
+    opacity: 1;
+  }
+
+  100% {
+    width: 0;
+    opacity: 0;
+    margin-left: 100%;
+  }
+}
+
+
+/* --- SVG ANIMATIONS (COOKED / INTENSIFIED) --- */
+
+/* 1. ENGINE OUTPUT: Torque Curve Draw */
+.spec-item.anim-engine-output.is-visible .anim-path {
+  animation: svg-draw 1.5s cubic-bezier(0.1, 0, 0, 1) forwards;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 2px var(--neon));
+}
+
+@keyframes svg-draw {
+  from {
+    stroke-dashoffset: 40;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 2. ENGINE PLATFORM: Pulse Dot */
+.spec-item.anim-engine-platform.is-visible circle[r="4"] {
+  animation: svg-pulse-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes svg-pulse-dot {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    r: 4;
+  }
+
+  50% {
+    opacity: 1;
+    r: 6;
+    stroke-width: 2;
+    filter: drop-shadow(0 0 4px var(--neon));
+  }
+}
+
+/* 3. ENGINE TECH: Droplet Flow */
+.spec-item.anim-engine-tech.is-visible path[transform*="translate"] {
+  animation: svg-drop-flow 2.5s ease-in-out infinite;
+}
+
+@keyframes svg-drop-flow {
+
+  0%,
+  100% {
+    transform: translate(4px, 4px) scale(0.6);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translate(4px, 10px) scale(0.7);
+    opacity: 1;
+    stroke: var(--neon);
+  }
+}
+
+/* 4. TRANSMISSION: Gear Rotation (Faster) */
+.spec-item.anim-transmission.is-visible svg {
+  animation: svg-gear-turn 12s linear infinite;
+}
+
+.spec-item.anim-transmission.is-visible circle[stroke="var(--neon)"] {
+  animation: svg-counter-turn 6s linear infinite;
+  transform-origin: 24px 24px;
+}
+
+@keyframes svg-gear-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes svg-counter-turn {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* 5. CLUTCH: Plate Separation */
+.spec-item.anim-clutch.is-visible .anim-plate {
+  animation: svg-clutch-sep 3s ease-in-out infinite;
+  stroke-width: 2;
+}
+
+@keyframes svg-clutch-sep {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(6px);
+    opacity: 0.6;
+  }
+}
+
+/* 6. CHASSIS: Rigid Opacity */
+.spec-item.anim-chassis.is-visible path[opacity="0.4"] {
+  animation: svg-breathe 3s ease-in-out infinite;
+}
+
+@keyframes svg-breathe {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+    stroke: var(--neon);
+    filter: drop-shadow(0 0 3px var(--neon));
+  }
+}
+
+/* 7. SUSPENSION: Fork Compression */
+.spec-item.anim-suspension.is-visible .anim-fork-upper {
+  animation: svg-fork-compress 2.5s ease-in-out infinite;
+}
+
+@keyframes svg-fork-compress {
+
+  0%,
+  100% {
+    height: 12px;
+    y: 6px;
+  }
+
+  50% {
+    height: 18px;
+    y: 3px;
+    opacity: 0.8;
+  }
+}
+
+/* 8. BRAKING: Rotor Dash (High Speed) */
+.spec-item.anim-braking.is-visible .anim-rotor {
+  animation: svg-spin-dash 5s linear infinite;
+  transform-origin: 20px 20px;
+}
+
+@keyframes svg-spin-dash {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 9. WHEELS: Slow Roll */
+.spec-item.anim-wheels.is-visible svg {
+  animation: svg-wheel-roll 10s linear infinite;
+}
+
+@keyframes svg-wheel-roll {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 10. ERGONOMICS: Rider Drift */
+.spec-item.anim-ergonomics.is-visible circle {
+  animation: svg-head-drift 4s ease-in-out infinite;
+}
+
+@keyframes svg-head-drift {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* 11. WEIGHT: Scale Balance */
+.spec-item.anim-weight.is-visible rect {
+  animation: svg-weight-settle 1.5s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+}
+
+@keyframes svg-weight-settle {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 12. ELECTRONICS: HUD Blink */
+.spec-item.anim-electronics.is-visible rect[width="2"] {
+  animation: svg-hud-blink 0.8s step-end infinite;
+  fill: var(--neon);
+}
+
+@keyframes svg-hud-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* 13. EFFICIENCY: Arrow Flow */
+.spec-item.anim-efficiency.is-visible path[stroke="var(--neon)"] {
+  animation: svg-arrow-push 2s ease-out infinite;
+  stroke-width: 2;
+}
+
+@keyframes svg-arrow-push {
+  0% {
+    transform: translateX(0);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateX(6px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 0.6;
+  }
+}
+
+/* =========================================
+   CREATIVE TEXT COLORING (COOKED HARD)
+   ========================================= */
+
+/* RPM: R (Blue) -> P (Purple) -> M (Red) */
+.gradient-rpm {
+  display: inline-block;
+  font-weight: 700;
+}
+
+.gradient-rpm .r {
+  color: #0088ff;
+  text-shadow: 0 0 10px rgba(0, 136, 255, 0.6);
+}
+
+.gradient-rpm .p {
+  color: #a600ff;
+  text-shadow: 0 0 10px rgba(166, 0, 255, 0.6);
+}
+
+.gradient-rpm .m {
+  color: #ff0000;
+  text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+  animation: rpm-pulse 0.1s infinite alternate;
+}
+
+@keyframes rpm-pulse {
+  from {
+    opacity: 0.9;
+    text-shadow: 0 0 10px red;
+  }
+
+  to {
+    opacity: 1;
+    text-shadow: 0 0 20px red, 0 0 30px red;
+  }
+}
+
+/* 155cc: Gold / Premium Performance */
+.gradient-cc {
+  background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(191, 149, 63, 0.4);
+}
+
+/* LIQUID COOLED: Flowing Neon Blue Liquid */
+.gradient-liquid {
+  background: linear-gradient(90deg, #00d2ff, #3a7bd5, #00d2ff);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: liquid-flow 3s linear infinite;
+  text-shadow: 0 0 5px rgba(0, 210, 255, 0.3);
+}
+
+@keyframes liquid-flow {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* VVA: Electric Shock / High Tech */
+.gradient-vva {
+  color: #fff;
+  text-shadow:
+    0 0 5px #0ff,
+    0 0 10px #0ff,
+    0 0 20px #0ff;
+  animation: vva-flicker 2s infinite;
+}
+
+.gradient-valve,
+.gradient-actuation {
+  background: linear-gradient(180deg, #fff 0%, #a1a1a1 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes vva-flicker {
+
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    text-shadow:
+      0 0 5px #0ff,
+      0 0 10px #0ff;
+    color: #fff;
+  }
+
+  20%,
+  24%,
+  55% {
+    text-shadow: none;
+    color: #333;
+  }
+}
+
+/* 6-SPEED: Fast Motion Blur */
+.gradient-speed {
+  display: inline-block;
+  color: #fceabb;
+  background: linear-gradient(to right, #fceabb 0%, #f8b500 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: italic;
+  padding-right: 5px;
+  text-shadow: 2px 0 0 rgba(248, 181, 0, 0.5);
+}
+
+/* ASSIST & SLIPPER: Smooth & Gentle */
+.gradient-clutch {
+  background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 2px rgba(137, 247, 254, 0.3));
+}
+
+/* DELTABOX: Structural Metallic */
+.gradient-deltabox {
+  background: linear-gradient(to bottom, #cfd9df 0%, #e2ebf0 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 2px;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+}
+
+/* UPSIDE-DOWN: Inverted Gold/Bronze (Typical Fork Color) */
+.gradient-forks {
+  background: linear-gradient(to bottom, #d4af37 0%, #c5a028 40%, #f1d87e 50%, #d4af37 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+}
+
+/* ABS: Safety Orange Pulse */
+.gradient-abs {
+  color: #ff9966;
+  animation: abs-warning 1s ease-in-out infinite alternate;
+}
+
+@keyframes abs-warning {
+  from {
+    text-shadow: 0 0 5px #ff5e62;
+  }
+
+  to {
+    text-shadow: 0 0 15px #ff5e62, 0 0 20px #ff9966;
+  }
+}
+
+/* UPRIGHT: Stable & Balanced */
+.gradient-upright {
+  background: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* LIGHTWEIGHT: Float / Airy */
+.gradient-lightweight {
+  color: #e0c3fc;
+  text-shadow: 0 0 10px rgba(224, 195, 252, 0.5);
+  animation: float-text 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes float-text {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.gradient-kg {
+  font-weight: 300;
+  color: var(--muted);
+}
+
+/* FULL DIGITAL: Matrix Data Glitch */
+.gradient-digital {
+  color: #0f0;
+  text-shadow: 0 0 5px #0f0;
+  font-family: 'Courier New', monospace;
+  /* Tech vibe */
+  letter-spacing: -1px;
+  animation: digital-glitch 0.3s infinite;
+}
+
+@keyframes digital-glitch {
+  0% {
+    text-shadow: 2px 0 red, -2px 0 blue;
+  }
+
+  25% {
+    text-shadow: -2px 0 red, 2px 0 blue;
+  }
+
+  50% {
+    text-shadow: 2px 0 red, -2px 0 blue;
+  }
+
+  75% {
+    text-shadow: -2px 0 red, 2px 0 blue;
+  }
+
+  100% {
+    text-shadow: 2px 0 red, -2px 0 blue;
+  }
+}
+
+/* ECO: Nature / Money Green */
+.gradient-eco {
+  background: linear-gradient(to right, #11998e, #38ef7d);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  text-shadow: 0 0 5px rgba(56, 239, 125, 0.4);
+}
+
+/* BRAKES: Heat Gradient (Hot Metal) */
+.gradient-brakes {
+  background: linear-gradient(to right, #8a2387, #e94057, #f27121);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(233, 64, 87, 0.4);
+  animation: brake-heat 2s infinite alternate;
+}
+
+@keyframes brake-heat {
+  from {
+    filter: brightness(1);
+  }
+
+  to {
+    filter: brightness(1.3) drop-shadow(0 0 5px #f27121);
+  }
+}
+
+/* ALLOYS: Chrome / Silver Shine */
+.gradient-alloys {
+  background: linear-gradient(to right, #fff 0%, #a1a1a1 20%, #fff 40%, #a1a1a1 60%, #fff 100%);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+  display: inline-block;
+  animation: alloy-shine 3s linear infinite;
+}
+
+@keyframes alloy-shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* TYRES: Tarmac / Grip */
+.gradient-tyres {
+  background: linear-gradient(180deg, #888 0%, #222 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+/* =========================================
+   PREMIUM FEATURES - COOKED HARD
+   ========================================= */
+
+/* === FIXED SVG ANIMATIONS === */
+
+/* ENGINE OUTPUT: Piston Pump */
+.spec-item.anim-engine-output.is-visible .anim-piston {
+  animation: piston-pump 1.2s ease-in-out infinite;
+  transform-origin: 20px 24px;
+}
+
+@keyframes piston-pump {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* ENGINE OUTPUT: Enhanced Curve Draw (Loop) */
+.spec-item.anim-engine-output.is-visible .anim-path {
+  animation: svg-draw-loop 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes svg-draw-loop {
+  0% {
+    stroke-dashoffset: 40;
+    opacity: 0.6;
+  }
+
+  50% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+
+  100% {
+    stroke-dashoffset: -40;
+    opacity: 0.6;
+  }
+}
+
+/* CONTROL & WEIGHT: Scale Beam Tilt */
+.spec-item.anim-weight.is-visible .anim-scale-beam {
+  animation: scale-tilt 3s ease-in-out infinite;
+  transform-origin: 20px 24px;
+}
+
+@keyframes scale-tilt {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-4deg);
+  }
+
+  75% {
+    transform: rotate(4deg);
+  }
+}
+
+/* === CUSTOM NEON CURSOR === */
+
+* {
+  cursor: none !important;
+}
+
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--neon);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease-out, opacity 0.3s;
+  box-shadow:
+    0 0 10px var(--neon),
+    0 0 20px var(--neon),
+    inset 0 0 5px var(--neon);
+  opacity: 1;
+  /* Visible by default */
+}
+
+body:hover .custom-cursor {
+  opacity: 1;
+}
+
+.custom-cursor.hover {
+  transform: scale(1.5);
+  background: rgba(185, 251, 255, 0.1);
+}
+
+/* === 3D MAGNETIC HOVER (SPEC ITEMS) === */
+
+.spec-item {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+  will-change: transform;
+}
+
+.spec-item:hover {
+  transform: translateZ(10px);
+  box-shadow: 0 10px 40px rgba(185, 251, 255, 0.2);
+}
+
+.spec-item:hover .spec-content {
+  background: rgba(185, 251, 255, 0.02);
+  border-radius: 8px;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+/* === PARTICLE CANVAS === */
+
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+/* === SCROLL REVEAL ENHANCEMENTS === */
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(5px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out, filter 0.8s ease-out;
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* =========================================
+   MOBILE ADAPTATION (RESPONSIVE)
+   ========================================= */
+
+@media screen and (max-width: 768px) {
+
+  /* --- Typography & Scale --- */
+
+  #opening .title-layer h1 {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+    letter-spacing: 0.25em;
+    width: 90%;
+    line-height: 1.2;
+  }
+
+  #opening .title-layer p {
+    font-size: 0.7rem;
+    left: 8vw;
+    bottom: 8vh;
+  }
+
+  #interlude h2,
+  #act2 .threshold-marker {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    letter-spacing: 0.25em;
+    width: 90%;
+  }
+
+  /* --- Layout Adjustments --- */
+
+  #act2 .act2-logo {
+    width: 60vw;
+  }
+
+  #act4 {
+    padding: 8vh 6vw;
+  }
+
+  .spec-grid {
+    gap: 5vh;
+  }
+
+  .spec-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .anim-zone {
+    align-self: flex-start;
+  }
+
+  .spec-main {
+    font-size: 1.6rem;
+  }
+
+  .spec-sub {
+    font-size: 0.9rem;
+  }
+
+  .act4-logo {
+    width: 60vw;
+  }
+
+  /* --- Interaction Adjustments --- */
+
+  /* Disable custom cursor on mobile */
+  .custom-cursor {
+    display: none !important;
+  }
+
+  * {
+    cursor: auto !important;
+  }
+
+  /* Tone down 3D hover for performance/usability */
+  .spec-item:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .spec-item:active {
+    transform: scale(0.98);
+  }
+}
