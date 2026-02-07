@@ -1,21 +1,50 @@
 console.log("SCRIPT ACTIVE");
 
-// === BACKGROUND MUSIC CONTROL ===
+// === AGGRESSIVE BACKGROUND MUSIC CONTROL (COOKED HARD) ===
 const bgMusic = document.getElementById("bgMusic");
 if (bgMusic) {
   bgMusic.volume = 0.3; // Set ambient background volume (30%)
 
-  // Attempt to play BGM immediately
-  bgMusic.play().catch(() => {
-    // If autoplay is blocked, wait for first user interaction
-    const startMusic = () => {
-      bgMusic.play().catch(() => { });
-    };
+  // Unmute and try to play (audio starts muted in HTML to allow autoplay)
+  const attemptUnmuteAndPlay = () => {
+    bgMusic.muted = false; // Unmute
+    const playPromise = bgMusic.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        console.log("BGM playing successfully!");
+      }).catch(() => {
+        console.log("Autoplay still blocked, waiting for user interaction...");
+      });
+    }
+  };
 
-    document.addEventListener("click", startMusic, { once: true });
-    document.addEventListener("scroll", startMusic, { once: true });
-    document.addEventListener("touchstart", startMusic, { once: true });
+  // Try to unmute immediately when page loads
+  attemptUnmuteAndPlay();
+
+  // Retry after brief delays for browser compatibility
+  setTimeout(attemptUnmuteAndPlay, 100);
+  setTimeout(attemptUnmuteAndPlay, 300);
+  setTimeout(attemptUnmuteAndPlay, 500);
+
+  // Set up listeners for ALL user interactions to unmute and play
+  const startMusic = () => {
+    bgMusic.muted = false;
+    bgMusic.play().catch(() => { });
+  };
+
+  // Listen to every possible user interaction
+  ['click', 'touchstart', 'touchend', 'keydown', 'mousemove'].forEach(eventType => {
+    document.addEventListener(eventType, startMusic, { once: true });
   });
+
+  document.addEventListener("scroll", startMusic, { once: true, passive: true });
+
+  // Also try when first video plays
+  const firstVideo = document.querySelector('video');
+  if (firstVideo) {
+    firstVideo.addEventListener('play', startMusic, { once: true });
+    firstVideo.addEventListener('canplay', startMusic, { once: true });
+  }
 }
 
 // Continuation timing controls (safe to tune).
