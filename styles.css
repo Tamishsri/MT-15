@@ -1319,6 +1319,60 @@ body:hover .custom-cursor {
   background: rgba(185, 251, 255, 0.1);
 }
 
+/* === CUSTOM CYBERPUNK SCROLLBAR (COOKED HARD) === */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(to right, #000000, #0a0a0a, #000000);
+  border-left: 1px solid rgba(185, 251, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--neon-deep) 0%, var(--neon) 50%, var(--neon-deep) 100%);
+  border-radius: 2px;
+  border: 2px solid #000000;
+  box-shadow:
+    0 0 10px var(--neon),
+    0 0 20px rgba(185, 251, 255, 0.3),
+    inset 0 0 5px rgba(185, 251, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--neon) 0%, #ffffff 50%, var(--neon) 100%);
+  box-shadow:
+    0 0 15px var(--neon),
+    0 0 30px var(--neon),
+    0 0 45px rgba(185, 251, 255, 0.5),
+    inset 0 0 10px #ffffff;
+  border-color: var(--neon);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--neon);
+  box-shadow:
+    0 0 20px var(--neon),
+    0 0 40px var(--neon),
+    0 0 60px rgba(185, 251, 255, 0.8),
+    inset 0 0 15px #ffffff;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--neon) #000000;
+}
+
+/* Scrollbar corner */
+::-webkit-scrollbar-corner {
+  background: #000000;
+}
+
 /* === 3D MAGNETIC HOVER (SPEC ITEMS) === */
 
 .spec-item {

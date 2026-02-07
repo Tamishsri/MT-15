@@ -341,12 +341,18 @@ specItems.forEach((item) => specObserver.observe(item));
    PREMIUM FEATURES - COOKED HARD
    ========================================= */
 
-// === CUSTOM NEON CURSOR ===
+// === CUSTOM NEON CURSOR (FIXED FOR IMMEDIATE VISIBILITY) ===
 const customCursor = document.querySelector('.custom-cursor');
-let mouseX = 0;
-let mouseY = 0;
-let cursorX = 0;
-let cursorY = 0;
+let mouseX = window.innerWidth / 2; // Start at center
+let mouseY = window.innerHeight / 2;
+let cursorX = window.innerWidth / 2;
+let cursorY = window.innerHeight / 2;
+
+// Make cursor visible immediately
+if (customCursor) {
+  customCursor.style.opacity = '1';
+  customCursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
+}
 
 document.addEventListener('mousemove', (e) => {
   mouseX = e.clientX;
