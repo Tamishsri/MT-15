@@ -1299,23 +1299,31 @@ body::after {
   border: 2px solid var(--neon);
   border-radius: 50%;
   position: fixed;
+  top: 50%;
+  /* Start at center */
+  left: 50%;
+  /* Start at center */
+  transform: translate(-50%, -50%);
+  /* Center the cursor */
   pointer-events: none;
   z-index: 9999;
-  transition: transform 0.15s ease-out, opacity 0.3s;
+  transition: transform 0.15s ease-out;
   box-shadow:
     0 0 10px var(--neon),
     0 0 20px var(--neon),
     inset 0 0 5px var(--neon);
-  opacity: 1;
-  /* Visible by default */
+  opacity: 1 !important;
+  /* Force visibility */
+  visibility: visible !important;
+  display: block !important;
 }
 
 body:hover .custom-cursor {
-  opacity: 1;
+  opacity: 1 !important;
 }
 
 .custom-cursor.hover {
-  transform: scale(1.5);
+  transform: translate(-50%, -50%) scale(1.5);
   background: rgba(185, 251, 255, 0.1);
 }
 

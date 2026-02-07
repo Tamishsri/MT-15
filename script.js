@@ -341,17 +341,21 @@ specItems.forEach((item) => specObserver.observe(item));
    PREMIUM FEATURES - COOKED HARD
    ========================================= */
 
-// === CUSTOM NEON CURSOR (FIXED FOR IMMEDIATE VISIBILITY) ===
+// === CUSTOM NEON CURSOR (BULLETPROOF VISIBILITY FIX) ===
 const customCursor = document.querySelector('.custom-cursor');
-let mouseX = window.innerWidth / 2; // Start at center
+let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
 let cursorX = window.innerWidth / 2;
 let cursorY = window.innerHeight / 2;
 
-// Make cursor visible immediately
+// Force cursor to be visible immediately
 if (customCursor) {
   customCursor.style.opacity = '1';
-  customCursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
+  customCursor.style.visibility = 'visible';
+  customCursor.style.display = 'block';
+  customCursor.style.top = '50%';
+  customCursor.style.left = '50%';
+  customCursor.style.transform = 'translate(-50%, -50%)';
 }
 
 document.addEventListener('mousemove', (e) => {
@@ -367,7 +371,9 @@ function updateCursor() {
   cursorY += dy * 0.2;
 
   if (customCursor) {
-    customCursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
+    customCursor.style.top = `${cursorY}px`;
+    customCursor.style.left = `${cursorX}px`;
+    customCursor.style.transform = 'translate(-50%, -50%)';
   }
 
   requestAnimationFrame(updateCursor);
