@@ -57,6 +57,15 @@ window.addEventListener('load', () => {
   setTimeout(() => {
     if (loadingScreen) {
       loadingScreen.classList.add('hidden');
+
+      // Trigger music when loading screen completes
+      if (bgMusic) {
+        bgMusic.muted = false;
+        bgMusic.volume = 0.3;
+        bgMusic.play().catch(() => {
+          console.log('Music playback after loading screen blocked, waiting for user interaction');
+        });
+      }
     }
   }, 2500); // Hide after 2.5 seconds
 });
