@@ -47,6 +47,35 @@ if (bgMusic) {
   }
 }
 
+/* =========================================
+   PREMIUM CYBERPUNK FEATURES - JAVASCRIPT
+   ========================================= */
+
+// === LOADING SCREEN ===
+const loadingScreen = document.getElementById('loadingScreen');
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (loadingScreen) {
+      loadingScreen.classList.add('hidden');
+    }
+  }, 2500); // Hide after 2.5 seconds
+});
+
+// === SCROLL PROGRESS INDICATOR ===
+const scrollProgress = document.querySelector('.scroll-progress');
+function updateScrollProgress() {
+  if (!scrollProgress) return;
+
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrollPercent = (scrollTop / docHeight) * 100;
+
+  scrollProgress.style.height = `${Math.min(scrollPercent, 100)}%`;
+}
+
+window.addEventListener('scroll', updateScrollProgress, { passive: true });
+window.addEventListener('resize', updateScrollProgress, { passive: true });
+
 // Continuation timing controls (safe to tune).
 const HOLD_AFTER_VIDEO1_MS = 700;
 const VIDEO2_FADE_MS = 900;
